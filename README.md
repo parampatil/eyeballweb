@@ -48,3 +48,12 @@ export default tseslint.config({
   },
 })
 ```
+### Tech Used
+- React Vite
+- TypeScript
+- Tailwind CSS
+- react-icons
+- axios
+- zustand (State Management)
+- jszip
+- file-saver
