@@ -18,6 +18,24 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		animation: {
+  			'shiny-text': 'shiny-text 8s infinite',
+			'fade': 'fadeIn 3s ease-in-out',
+  		},
+  		keyframes: {
+  			'shiny-text': {
+  				'0%, 90%, 100%': {
+  					'background-position': 'calc(-100% - var(--shiny-width)) 0'
+  				},
+  				'30%, 60%': {
+  					'background-position': 'calc(100% + var(--shiny-width)) 0'
+  				}
+  			},
+			'fadeIn': {
+				from: { opacity: 0, transform: 'translateY(10px)' },
+				to: { opacity: 1, transform: 'translateY(0)' },
+			},
   		}
   	}
   },

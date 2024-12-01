@@ -13,10 +13,16 @@ const Home = () => {
   return (
     <MainLayout>
       <section className="flex-1 flex flex-col">
-        <LoadDataset />
-        <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
-        <div className="flex-1 overflow-auto p-4 border border-disabled rounded">
-          {activeTab === "Input Images" ? <InputImageGrid /> : <ProcessedImageGrid />}
+        <LoadDataset activeTab={activeTab} setActiveTab={setActiveTab} />
+        <div className="flex-1 m-2 flex flex-col border border-gray-400 rounded">
+          <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+          <div className="flex-1 flex p-4 border border-disabled rounded">
+            {activeTab === "Input Images" ? (
+              <InputImageGrid />
+            ) : (
+              <ProcessedImageGrid />
+            )}
+          </div>
         </div>
         <Bottombar />
       </section>

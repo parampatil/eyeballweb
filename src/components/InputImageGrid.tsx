@@ -1,10 +1,17 @@
 import { useState } from "react";
 import { useInputImageStore } from "../store/inputImageStore";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const ImageGrid = () => {
   const { inputImages, removeInputImage } = useInputImageStore();
-
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const imagesPerPage = 10;
   const totalPages = Math.ceil(inputImages.length / imagesPerPage);
 
@@ -24,18 +31,32 @@ const ImageGrid = () => {
   const selectedImages = inputImages.slice(startIndex, startIndex + imagesPerPage);
 
   return (
-    <div>
-      <div className="grid grid-cols-5 gap-2 p-4">
+    <div className="flex-1 flex flex-col">
+      <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 p-4">
+        {selectedImages.length === 0 && (
+          <div className="col-span-full text-center m-auto">No images to display</div>
+        )}
         {selectedImages.map((image, index) => (
           <div
             key={startIndex + index}
             className="border border-disabled rounded-md overflow-hidden relative group"
           >
-            <img
-              src={URL.createObjectURL(image)}
-              alt={`Image ${startIndex + index + 1}`}
-              className="w-full h-full object-cover"
-            />
+            <Dialog>
+              <DialogTrigger asChild>
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt={`Image ${startIndex + index + 1}`}
+                  className="w-full h-full object-cover cursor-pointer"
+                  onClick={() => setSelectedImage(URL.createObjectURL(image))}
+                />
+              </DialogTrigger>
+              <DialogContent className="bg-background">
+                <DialogHeader>
+                  <DialogTitle>View Image</DialogTitle>
+                </DialogHeader>
+                {selectedImage && <img src={selectedImage} alt={`Selected Image`} className="w-full h-auto rounded" />}
+              </DialogContent>
+            </Dialog>
             <button
               onClick={() => removeInputImage(startIndex + index)}
               className="scale-0 absolute top-0 right-0 m-1 w-8 h-8 bg-red-500 text-white text-lg rounded-full group-hover:scale-100 transform transition duration-300"
@@ -45,21 +66,21 @@ const ImageGrid = () => {
           </div>
         ))}
       </div>
-      <div className="flex justify-between mt-4">
+      <div className="text-black flex justify-between">
         <button
           onClick={handlePreviousPage}
           disabled={currentPage === 1}
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+          className="px-4 py-2 bg-slate-300 rounded disabled:opacity-50 hover:-translate-y-1 hover:bg-slate-300/80 hover:shadow-white transition-all duration-300"
         >
           Previous
         </button>
-        <span>
+        <span className="text-white">
           Page {currentPage} of {totalPages}
         </span>
         <button
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+          className="px-4 py-2 bg-slate-300 rounded disabled:opacity-50 hover:-translate-y-1 hover:bg-slate-300/80 hover:shadow-white transition-all duration-300"
         >
           Next
         </button>

@@ -21,7 +21,7 @@ const Bottombar = () => {
   };
 
   return (
-    <div className="p-2">
+    <div className="p-2 m-2 border border-gray-400 rounded">
       <button
         onClick={handleDownloadImages}
         className="flex justify-center align-middle text-center gap-2 p-2 font-semibold rounded border border-primary hover:bg-primary hover:text-black transition duration-300"
