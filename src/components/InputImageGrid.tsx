@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { FadeText } from "@/components/ui/fade-text";
 
 const ImageGrid = () => {
   const { inputImages, removeInputImage } = useInputImageStore();
@@ -15,6 +16,7 @@ const ImageGrid = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const imagesPerPage = 10;
   const totalPages = Math.ceil(inputImages.length / imagesPerPage);
+  const [imageDimensions, setImageDimensions] = useState<string | null>(null);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -34,6 +36,16 @@ const ImageGrid = () => {
     startIndex + imagesPerPage
   );
 
+  const calculateImageDimensions = (image: File): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(image);
+      img.onload = () => {
+        resolve(img.width + ' x ' + img.height);
+      };
+    });
+  };
+
   return (
     <div className="flex-1 flex flex-col">
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 p-4">
@@ -52,13 +64,16 @@ const ImageGrid = () => {
                 <img
                   src={URL.createObjectURL(image)}
                   alt={`Image ${startIndex + index + 1}`}
-                  className="w-full h-full object-cover cursor-pointer"
-                  onClick={() => setSelectedImage(URL.createObjectURL(image))}
+                  onClick={async () => {
+                    setSelectedImage(URL.createObjectURL(image));
+                    const dimensions = await calculateImageDimensions(image);
+                    setImageDimensions(dimensions);
+                  }}
                 />
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Preview Input Image</DialogTitle>
+                    <DialogTitle className="me-5 flex justify-between"><FadeText direction="left" text="Preview Input Image" /><span className="text-appaccent animate-fade duration-500">{imageDimensions}</span></DialogTitle>
                 </DialogHeader>
                 <DialogDescription>
                   {selectedImage && (

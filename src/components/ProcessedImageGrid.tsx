@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { FadeText } from "@/components/ui/fade-text";
 
 const ProcessedImageGrid = () => {
   const { processedImages } = useProcessedImageStore();
@@ -15,6 +16,7 @@ const ProcessedImageGrid = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const imagesPerPage = 10;
   const totalPages = Math.ceil(processedImages.length / imagesPerPage);
+  const [imageDimensions, setImageDimensions] = useState<string | null>(null);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -34,6 +36,17 @@ const ProcessedImageGrid = () => {
     startIndex + imagesPerPage
   );
 
+  const calculateImageDimensions = (image: string): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = document.createElement('img');
+      img.src = image;
+      img.onload = () => {
+        resolve(img.width + ' x ' + img.height);
+      };
+    });
+  };
+
+
   return (
     <div className="flex-1 flex flex-col">
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 p-4">
@@ -46,17 +59,21 @@ const ProcessedImageGrid = () => {
             className="border border-disabled rounded-md overflow-hidden relative group"
           >
             <Dialog>
-              <DialogTrigger asChild>
+                <DialogTrigger asChild>
                 <img
                   src={image}
                   alt={`Processed Image ${startIndex + index + 1}`}
                   className="w-full h-full object-cover cursor-pointer"
-                  onClick={() => setSelectedImage(image)}
+                  onClick={async () => {
+                  setSelectedImage(image);
+                  const dimensions = await calculateImageDimensions(image);
+                  setImageDimensions(dimensions);
+                  }}
                 />
-              </DialogTrigger>
+                </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Preview Processed Image</DialogTitle>
+                  <DialogTitle className="me-5 flex justify-between"><FadeText direction="left" text="Preview Processed Image" /><span className="text-appaccent animate-fade duration-500">{imageDimensions}</span></DialogTitle>
                 </DialogHeader>
                 <DialogDescription>
                 {selectedImage && <img src={selectedImage} alt={`Selected Processed Image`} className="w-full h-auto rounded" />}

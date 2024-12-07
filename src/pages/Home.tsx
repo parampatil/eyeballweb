@@ -5,7 +5,6 @@ import InputImageGrid from "../components/InputImageGrid";
 import ProcessedImageGrid from "../components/ProcessedImageGrid";
 import Sidebar from "../components/Sidebar";
 import LoadDataset from "../components/LoadDataset";
-import Bottombar from "../components/Bottombar";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("Input Images");
@@ -13,7 +12,7 @@ const Home = () => {
   return (
     <MainLayout>
       <section className="flex-1 flex flex-col">
-        <div className="flex-1 flex flex-col  md:flex-row gap-2 items-center justify-between p-2 border-b border-gray-400">
+        <div className="flex-1 flex flex-col md:flex-row gap-2 items-center justify-between p-2">
           <div className="h-full flex-1 flex w-full flex-col border border-gray-400 rounded">
             <LoadDataset activeTab={activeTab} setActiveTab={setActiveTab} />
             <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -27,7 +26,6 @@ const Home = () => {
           </div>
           <Sidebar />
         </div>
-        <Bottombar />
       </section>
     </MainLayout>
   );

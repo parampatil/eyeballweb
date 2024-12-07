@@ -1,5 +1,5 @@
-import { FaImages } from "react-icons/fa";
-import { FaBan } from "react-icons/fa";
+import { FaDatabase, FaImages, FaBan } from "react-icons/fa6";
+import { FadeText } from "@/components/ui/fade-text";
 
 import { useInputImageStore } from "@/store/inputImageStore";
 import { useProcessedImageStore } from "@/store/processedImageStore";
@@ -60,20 +60,18 @@ const LoadDataset = ({
     clearProcessedImages();
   };
 
-  
-
   return (
     <div className="flex flex-col gap-2 border border-gray-400 m-2 p-2 rounded">
       <div className="flex-1">
-        <h1>LoadDataset</h1>
+        <h1>Tool Bar</h1>
       </div>
       <div className="flex justify-between">
         <div className="flex gap-4">
           {inputImages.length === 0 ? (
             <>
               <label className="flex items-center justify-center gap-2 p-2 font-semibold rounded border border-appaccent hover:bg-appaccent/50 transition duration-300 cursor-pointer">
-                <FaImages className="m-auto" />
-                <span>Load Images</span>
+                <FaImages className="animate-fade duration-500 m-auto" />
+                <FadeText direction="left" text="Load Images" />
                 <input
                   type="file"
                   multiple
@@ -85,7 +83,8 @@ const LoadDataset = ({
                 onClick={handleLoadDefaultDataset}
                 className="flex justify-center align-middle text-center gap-2 p-2 font-semibold rounded border border-appaccent hover:bg-appaccent/50 transition duration-300"
               >
-                Load Default dataset
+                <FaDatabase className="animate-fade duration-500 m-auto" />
+                <FadeText direction="left" text="Load Default dataset" />
               </button>
             </>
           ) : activeTab === "Input Images" ? (
@@ -93,16 +92,16 @@ const LoadDataset = ({
               onClick={handleInputImageClear}
               className="flex justify-center align-middle text-center gap-2 p-2 font-semibold rounded border border-appaccent hover:bg-appaccent/50 transition duration-300"
             >
-              <FaBan className="m-auto" />
-              Clear Input Images
+              <FaBan className="animate-fade duration-500 m-auto" />
+              <FadeText direction="left" text="Clear Input Images" />
             </button>
           ) : (
             <button
               onClick={handleOutputImageClear}
               className="flex justify-center align-middle text-center gap-2 p-2 font-semibold rounded border border-appaccent hover:bg-appaccent/50 transition duration-300"
             >
-              <FaBan className="m-auto" />
-              Clear Processed Images
+              <FaBan className="animate-fade duration-500 m-auto" />
+              <FadeText direction="left" text="Clear Processed Images" />
             </button>
           )}
         </div>
