@@ -2,8 +2,8 @@
 import { create } from 'zustand';
 
 interface ProcessedImageStore {
-  processedImages: File[];
-  addProcessedImage: (image: File) => void;
+  processedImages: string[];
+  addProcessedImage: (image: string) => void;
   clearProcessedImages: () => void;
 }
 

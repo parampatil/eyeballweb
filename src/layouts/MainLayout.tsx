@@ -3,7 +3,7 @@ import Header from '../components/Header';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="bg-background text-text h-screen flex flex-col">
+    <div className="dark:bg-appbackground min-h-screen flex flex-col">
       <Header />
       <div className="flex flex-1">
         {children}

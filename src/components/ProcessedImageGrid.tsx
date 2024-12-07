@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useProcessedImageStore } from "@/store/processedImageStore";
 import {
   Dialog,
+  DialogDescription,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -47,22 +48,24 @@ const ProcessedImageGrid = () => {
             <Dialog>
               <DialogTrigger asChild>
                 <img
-                  src={URL.createObjectURL(image)}
+                  src={image}
                   alt={`Processed Image ${startIndex + index + 1}`}
                   className="w-full h-full object-cover cursor-pointer"
-                  onClick={() => setSelectedImage(URL.createObjectURL(image))}
+                  onClick={() => setSelectedImage(image)}
                 />
               </DialogTrigger>
-              <DialogContent className="bg-background">
+              <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>View Processed Image</DialogTitle>
+                  <DialogTitle>Preview Processed Image</DialogTitle>
                 </DialogHeader>
+                <DialogDescription>
                 {selectedImage && <img src={selectedImage} alt={`Selected Processed Image`} className="w-full h-auto rounded" />}
+                </DialogDescription>
               </DialogContent>
             </Dialog>
             <a
-              href={URL.createObjectURL(image)}
-              download={`processed-image-${startIndex + index + 1}.jpg`}
+              href={image}
+              download={`processed-image-${startIndex + index + 1}.png`}
               className="absolute top-0 right-0 m-1 scale-0 group-hover:scale-100 bg-blue-500 text-white rounded p-1 transition-transform duration-300"
             >
               Download

@@ -13,20 +13,22 @@ const Home = () => {
   return (
     <MainLayout>
       <section className="flex-1 flex flex-col">
-        <LoadDataset activeTab={activeTab} setActiveTab={setActiveTab} />
-        <div className="flex-1 m-2 flex flex-col border border-gray-400 rounded">
-          <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
-          <div className="flex-1 flex p-4 border border-disabled rounded">
-            {activeTab === "Input Images" ? (
-              <InputImageGrid />
-            ) : (
-              <ProcessedImageGrid />
-            )}
+        <div className="flex-1 flex flex-col  md:flex-row gap-2 items-center justify-between p-2 border-b border-gray-400">
+          <div className="h-full flex-1 flex w-full flex-col border border-gray-400 rounded">
+            <LoadDataset activeTab={activeTab} setActiveTab={setActiveTab} />
+            <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+            <div className="flex-1 flex p-4">
+              {activeTab === "Input Images" ? (
+                <InputImageGrid />
+              ) : (
+                <ProcessedImageGrid />
+              )}
+            </div>
           </div>
+          <Sidebar />
         </div>
         <Bottombar />
       </section>
-      <Sidebar />
     </MainLayout>
   );
 };

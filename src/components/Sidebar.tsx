@@ -1,5 +1,22 @@
-import { useModelParametersStore } from '@/store/modelParametersStore';
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+// Add a reset parameters option
+import { useModelParametersStore } from "@/store/modelParametersStore";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 const Sidebar = () => {
   const {
@@ -13,164 +30,264 @@ const Sidebar = () => {
     kernelValue,
     peripheralSigma,
     isPeripheralGrayscale,
-    setParameter
+    foveationType,
+    retinalWarp,
+    setParameter,
+    resetParameters,
   } = useModelParametersStore();
 
-
   return (
-    <aside className="w-80 border rounded border-gray-400 m-2 p-4 flex flex-col">
-      <h2 className="text-lg font-bold mb-4">Model Parameters</h2>
+    <aside className="h-full w-full md:w-80 border rounded border-gray-400 p-4 flex flex-col gap-4">
+      <h2 className="text-lg font-bold">Model Parameters</h2>
+
+      <button
+        onClick={resetParameters}
+        className="text-sm font-medium text-appaccent transition-all duration-300 hover:scale-105 hover:border hover:border-appaccent hover:bg-appaccent/10 p-2 rounded border border-transparent"
+      >
+        Reset Parameters
+      </button>
 
       <div className="mt-4">
         <Tooltip>
           <TooltipTrigger asChild>
             <label className="block">Input Image Resolution (px)</label>
           </TooltipTrigger>
-          <TooltipContent>Enter the resolution for input images in pixels.</TooltipContent>
+          <TooltipContent>
+            Enter the resolution for input images in pixels.
+          </TooltipContent>
         </Tooltip>
-        <input
+        <Input
           type="number"
+          min={1}
           value={inputImageResolution}
-          onChange={(e) => setParameter('inputImageResolution', Math.max(1, parseInt(e.target.value) || 1))}
-          className="w-full mt-1 p-2 border border-gray-800 rounded text-gray-800"
+          onChange={(e) =>
+            setParameter(
+              "inputImageResolution",
+              Math.max(1, parseInt(e.target.value) || 1)
+            )
+          }
+          className="w-full mt-2 p-2 border !border-appaccent rounded"
         />
       </div>
 
-      <div className="mt-4">
+      <div>
         <Tooltip>
           <TooltipTrigger asChild>
             <label className="block">Fovea Location (x, y)</label>
           </TooltipTrigger>
-          <TooltipContent>Specify the x and y coordinates for the fovea location.</TooltipContent>
+          <TooltipContent>
+            Specify the x and y coordinates for the fovea location.
+          </TooltipContent>
         </Tooltip>
         <div className="flex gap-2">
-          <input
+          <Input
             type="number"
+            min={0}
             value={foveaX}
-            onChange={(e) => setParameter('foveaX', Math.min(inputImageResolution, parseInt(e.target.value) || 0))}
-            className="w-full mt-1 p-2 border border-gray-800 rounded text-gray-800"
+            onChange={(e) =>
+              setParameter(
+                "foveaX",
+                Math.min(inputImageResolution, parseInt(e.target.value) || 0)
+              )
+            }
+            className="w-full mt-2 p-2 border !border-appaccent rounded "
             placeholder="x"
           />
-          <input
+          <Input
             type="number"
+            min={0}
             value={foveaY}
-            onChange={(e) => setParameter('foveaY', Math.min(inputImageResolution, parseInt(e.target.value) || 0))}
-            className="w-full mt-1 p-2 border border-gray-800 rounded text-gray-800"
+            onChange={(e) =>
+              setParameter(
+                "foveaY",
+                Math.min(inputImageResolution, parseInt(e.target.value) || 0)
+              )
+            }
+            className="w-full mt-2 p-2 border !border-appaccent rounded "
             placeholder="y"
           />
         </div>
       </div>
 
-      <div className="mt-4">
+      <div>
         <Tooltip>
           <TooltipTrigger asChild>
             <label className="block">Fovea Radius: {foveaRadius}</label>
           </TooltipTrigger>
           <TooltipContent>Adjust the radius of the fovea area.</TooltipContent>
         </Tooltip>
-        <input
-          type="range"
+        <Slider
           min={0}
           max={inputImageResolution}
-          value={foveaRadius}
-          onChange={(e) => setParameter('foveaRadius', parseInt(e.target.value))}
-          className="w-full mt-1"
+          value={[foveaRadius]}
+          onValueChange={(value: number[]) =>
+            setParameter("foveaRadius", value[0])
+          }
+          className="w-full mt-2"
         />
       </div>
 
-      <div className="mt-4">
+      <div>
         <Tooltip>
           <TooltipTrigger asChild>
-            <label className="block">Peripheral Active Cone Cells (%): {peripheralConeCells}</label>
+            <label className="block">
+              Peripheral Active Cone Cells (%): {peripheralConeCells}
+            </label>
           </TooltipTrigger>
-          <TooltipContent>Set the percentage of active cone cells in the periphery.</TooltipContent>
+          <TooltipContent>
+            Set the percentage of active cone cells in the periphery.
+          </TooltipContent>
         </Tooltip>
-        <input
-          type="range"
+        <Slider
           min={0}
           max={100}
-          value={peripheralConeCells}
-          onChange={(e) => setParameter('peripheralConeCells', parseInt(e.target.value))}
-          className="w-full mt-1"
+          value={[peripheralConeCells]}
+          onValueChange={(value: number[]) =>
+            setParameter("peripheralConeCells", value[0])
+          }
+          className="w-full mt-2"
         />
       </div>
 
-      <div className="mt-4">
+      <div>
         <Tooltip>
           <TooltipTrigger asChild>
-            <label className="block">Fovea Active Rod Cells (%): {foveaRodCells}</label>
+            <label className="block">
+              Fovea Active Rod Cells (%): {foveaRodCells}
+            </label>
           </TooltipTrigger>
-          <TooltipContent>Set the percentage of active rod cells in the fovea.</TooltipContent>
+          <TooltipContent>
+            Set the percentage of active rod cells in the fovea.
+          </TooltipContent>
         </Tooltip>
-        <input
-          type="range"
+        <Slider
           min={0}
           max={100}
-          value={foveaRodCells}
-          onChange={(e) => setParameter('foveaRodCells', parseInt(e.target.value))}
-          className="w-full mt-1"
+          value={[foveaRodCells]}
+          onValueChange={(value: number[]) =>
+            setParameter("foveaRodCells", value[0])
+          }
+          className="w-full mt-2"
         />
       </div>
 
-      <div className="mt-4 flex items-center">
-        <input
-          type="checkbox"
+      <div className="flex items-center space-x-2 my-2">
+        <Checkbox
+          defaultChecked={isPeripheralBlurEnabled}
           checked={isPeripheralBlurEnabled}
-          onChange={(e) => setParameter('isPeripheralBlurEnabled', e.target.checked)}
-          className="mr-2"
+          onCheckedChange={(checked) =>
+            setParameter("isPeripheralBlurEnabled", checked)
+          }
         />
-        <label>Peripheral Gaussian Blur</label>
+        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          Peripheral Gaussian Blur
+        </label>
       </div>
 
       {isPeripheralBlurEnabled && (
         <>
-          <div className="mt-4">
+          <div className="ps-6">
             <Tooltip>
               <TooltipTrigger asChild>
                 <label className="block">Peripheral Gaussian Blur Kernel</label>
               </TooltipTrigger>
-              <TooltipContent>Select a kernel size for Gaussian blur.</TooltipContent>
+              <TooltipContent>
+                Select a kernel size for Gaussian blur.
+              </TooltipContent>
             </Tooltip>
-            <select
+            <Select
               value={kernelValue}
-              onChange={(e) => setParameter('kernelValue', e.target.value)}
-              className="w-full mt-1 p-2 border border-gray-800 rounded text-gray-800"
+              onValueChange={(value) => setParameter("kernelValue", value)}
             >
-              {[3, 5, 7, 9, 11, 21].map((size) => (
-                <option key={size} value={`(${size}, ${size})`}>{`(${size}, ${size})`}</option>
-              ))}
-            </select>
+              <SelectTrigger className="w-full mt-2 p-2 border !border-appaccent rounded">
+                <SelectValue placeholder="Select Kernel Size" />
+              </SelectTrigger>
+              <SelectContent>
+                {[3, 5, 7, 9, 11, 21].map((size) => (
+                  <SelectItem
+                    key={size}
+                    value={`(${size}, ${size})`}
+                  >{`(${size}, ${size})`}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
-          <div className="mt-4">
+          <div className="ps-6">
             <Tooltip>
               <TooltipTrigger asChild>
-                <label className="block">Peripheral Gaussian Sigma: {peripheralSigma}</label>
+                <label className="block">
+                  Peripheral Gaussian Sigma: {peripheralSigma}
+                </label>
               </TooltipTrigger>
-              <TooltipContent>Enter the sigma value for Gaussian blur.</TooltipContent>
+              <TooltipContent>
+                Enter the sigma value for Gaussian blur.
+              </TooltipContent>
             </Tooltip>
-            <input
+            <Input
               type="number"
+              min={0}
               value={peripheralSigma}
-              onChange={(e) => setParameter('peripheralSigma', parseFloat(e.target.value))}
+              onChange={(e) =>
+                setParameter("peripheralSigma", parseFloat(e.target.value))
+              }
               disabled={!isPeripheralBlurEnabled}
-              className={`w-full mt-1 p-2 border ${isPeripheralBlurEnabled ? 'border-gray-800' : 'border-gray-400'} rounded text-gray-${isPeripheralBlurEnabled ? '800' : '400'}`}
+              className={`w-full mt-2 p-2 border !border-appaccent rounded`}
             />
           </div>
         </>
       )}
 
-      <div className="mt-4 flex items-center">
-        <input
-          type="checkbox"
+      <div className="my-2 flex items-center space-x-2">
+        <Checkbox
+          defaultChecked={isPeripheralGrayscale}
           checked={isPeripheralGrayscale}
-          onChange={(e) => setParameter('isPeripheralGrayscale', e.target.checked)}
-          className="mr-2"
+          onCheckedChange={(checked) =>
+            setParameter("isPeripheralGrayscale", checked)
+          }
         />
-        <label>Peripheral Grayscale</label>
+        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          Peripheral Grayscale
+        </label>
       </div>
 
+      <div className="my-2 flex items-center space-x-2">
+        <Checkbox
+          defaultChecked={retinalWarp}
+          checked={retinalWarp}
+          onCheckedChange={(checked) =>
+            setParameter("retinalWarp", checked)
+          }
+        />
+        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          Retinal Warp
+        </label>
+      </div>
 
+      <div className="my-2">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <label className="block">Foveation Type</label>
+          </TooltipTrigger>
+          <TooltipContent>
+            Select the type of foveation: static or dynamic.
+          </TooltipContent>
+        </Tooltip>
+        <RadioGroup
+          defaultValue={foveationType}
+          onValueChange={(value) => setParameter("foveationType", value)}
+          className="flex justify-start gap-10 mt-2"
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="static" id="static" />
+            <Label htmlFor="static">Static</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="dynamic" id="dynamic" />
+            <Label htmlFor="dynamic">Dynamic</Label>
+          </div>
+        </RadioGroup>
+      </div>
     </aside>
   );
 };

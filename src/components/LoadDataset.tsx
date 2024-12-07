@@ -65,13 +65,13 @@ const LoadDataset = ({
   return (
     <div className="flex flex-col gap-2 border border-gray-400 m-2 p-2 rounded">
       <div className="flex-1">
-        <h1 className="text-xs">LoadDataset</h1>
+        <h1>LoadDataset</h1>
       </div>
       <div className="flex justify-between">
         <div className="flex gap-4">
           {inputImages.length === 0 ? (
             <>
-              <label className="flex items-center justify-center gap-2 p-2 font-semibold rounded border border-primary hover:bg-primary hover:text-black transition duration-300 cursor-pointer">
+              <label className="flex items-center justify-center gap-2 p-2 font-semibold rounded border border-appaccent hover:bg-appaccent/50 transition duration-300 cursor-pointer">
                 <FaImages className="m-auto" />
                 <span>Load Images</span>
                 <input
@@ -83,7 +83,7 @@ const LoadDataset = ({
               </label>
               <button
                 onClick={handleLoadDefaultDataset}
-                className="flex justify-center align-middle text-center gap-2 p-2 font-semibold rounded border border-primary hover:bg-primary hover:text-black transition duration-300"
+                className="flex justify-center align-middle text-center gap-2 p-2 font-semibold rounded border border-appaccent hover:bg-appaccent/50 transition duration-300"
               >
                 Load Default dataset
               </button>
@@ -91,7 +91,7 @@ const LoadDataset = ({
           ) : activeTab === "Input Images" ? (
             <button
               onClick={handleInputImageClear}
-              className="flex justify-center align-middle text-center gap-2 p-2 font-semibold rounded border border-primary hover:bg-primary hover:text-black transition duration-300"
+              className="flex justify-center align-middle text-center gap-2 p-2 font-semibold rounded border border-appaccent hover:bg-appaccent/50 transition duration-300"
             >
               <FaBan className="m-auto" />
               Clear Input Images
@@ -99,7 +99,7 @@ const LoadDataset = ({
           ) : (
             <button
               onClick={handleOutputImageClear}
-              className="flex justify-center align-middle text-center gap-2 p-2 font-semibold rounded border border-primary hover:bg-primary hover:text-black transition duration-300"
+              className="flex justify-center align-middle text-center gap-2 p-2 font-semibold rounded border border-appaccent hover:bg-appaccent/50 transition duration-300"
             >
               <FaBan className="m-auto" />
               Clear Processed Images

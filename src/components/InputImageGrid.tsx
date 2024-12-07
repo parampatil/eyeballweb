@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useInputImageStore } from "../store/inputImageStore";
 import {
   Dialog,
+  DialogDescription,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -28,13 +29,18 @@ const ImageGrid = () => {
   };
 
   const startIndex = (currentPage - 1) * imagesPerPage;
-  const selectedImages = inputImages.slice(startIndex, startIndex + imagesPerPage);
+  const selectedImages = inputImages.slice(
+    startIndex,
+    startIndex + imagesPerPage
+  );
 
   return (
     <div className="flex-1 flex flex-col">
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 p-4">
         {selectedImages.length === 0 && (
-          <div className="col-span-full text-center m-auto">No images to display</div>
+          <div className="col-span-full text-center m-auto">
+            No images to display
+          </div>
         )}
         {selectedImages.map((image, index) => (
           <div
@@ -50,11 +56,19 @@ const ImageGrid = () => {
                   onClick={() => setSelectedImage(URL.createObjectURL(image))}
                 />
               </DialogTrigger>
-              <DialogContent className="bg-background">
+              <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>View Image</DialogTitle>
+                  <DialogTitle>Preview Input Image</DialogTitle>
                 </DialogHeader>
-                {selectedImage && <img src={selectedImage} alt={`Selected Image`} className="w-full h-auto rounded" />}
+                <DialogDescription>
+                  {selectedImage && (
+                    <img
+                      src={selectedImage}
+                      alt={`Selected Image`}
+                      className="w-full h-auto rounded"
+                    />
+                  )}
+                </DialogDescription>
               </DialogContent>
             </Dialog>
             <button
@@ -74,7 +88,7 @@ const ImageGrid = () => {
         >
           Previous
         </button>
-        <span className="text-white">
+        <span className="dark:text-appaccent">
           Page {currentPage} of {totalPages}
         </span>
         <button
