@@ -125,8 +125,9 @@ const RunButton = ({
     // Send POST request to the backend with all images
     axios
       .post(
-        "https://eyeballflaskimagefinal-718563300949.us-central1.run.app/process",
-        // "http://127.0.0.1:5000/process",
+        // "https://eyeballflaskimagefinal-718563300949.us-central1.run.app/process",
+        "https://firstimg-718563300949.us-central1.run.app/process",
+        // "http://127.0.0.1:8080/process",
         formData,
         {
           headers: {
@@ -152,7 +153,8 @@ const RunButton = ({
           // Switch to Processed Images tab after processing all images
           setActiveTab("Processed Images");
           setButtonState("success");
-
+          setIsProcessing(false);
+          setTimeout(() => setButtonState("idle"), 5000);
         } else {
           const errorText = await response.data.text();
           toast({
@@ -182,8 +184,6 @@ const RunButton = ({
         setIsProcessing(false);
         setTimeout(() => setButtonState("idle"), 5000);
       });
-    setIsProcessing(false);
-    setTimeout(() => setButtonState("idle"), 5000);
   };
 
   return (
