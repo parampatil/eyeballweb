@@ -288,6 +288,9 @@ const Sidebar = () => {
           </div>
         </RadioGroup>
       </div>
+      <div className="w-full">
+        <p className="w-full text-center text-red-400">Download tool for more features</p>
+      </div>
       <div className="w-full border-t-8 border-gray-400 border-dotted pt-4 flex justify-center">
       <DownloadZip />
       </div>
