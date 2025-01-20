@@ -38,17 +38,17 @@ const ImageGrid = () => {
 
   const calculateImageDimensions = (image: File): Promise<string> => {
     return new Promise((resolve) => {
-      const img = document.createElement('img');
+      const img = document.createElement("img");
       img.src = URL.createObjectURL(image);
       img.onload = () => {
-        resolve(img.width + ' x ' + img.height);
+        resolve(img.width + " x " + img.height);
       };
     });
   };
 
   return (
     <div className="flex-1 flex flex-col">
-      <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 p-4">
         {selectedImages.length === 0 && (
           <div className="col-span-full text-center m-auto">
             No images to display
@@ -57,7 +57,7 @@ const ImageGrid = () => {
         {selectedImages.map((image, index) => (
           <div
             key={startIndex + index}
-            className="border border-disabled rounded-md overflow-hidden relative group"
+            className="h-fit border border-disabled rounded-md overflow-hidden relative group"
           >
             <Dialog>
               <DialogTrigger asChild>
@@ -73,7 +73,12 @@ const ImageGrid = () => {
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                    <DialogTitle className="me-5 flex justify-between"><FadeText direction="left" text="Preview Input Image" /><span className="text-appaccent animate-fade duration-500">{imageDimensions}</span></DialogTitle>
+                  <DialogTitle className="me-5 flex justify-between">
+                    <FadeText direction="left" text="Preview Input Image" />
+                    <span className="text-appaccent animate-fade duration-500">
+                      {imageDimensions}
+                    </span>
+                  </DialogTitle>
                 </DialogHeader>
                 <DialogDescription>
                   {selectedImage && (
@@ -95,25 +100,27 @@ const ImageGrid = () => {
           </div>
         ))}
       </div>
-      <div className="text-black flex justify-between">
-        <button
-          onClick={handlePreviousPage}
-          disabled={currentPage === 1}
-          className="px-4 py-2 bg-slate-300 rounded disabled:opacity-50 hover:-translate-y-1 hover:bg-slate-300/80 hover:shadow-white transition-all duration-300"
-        >
-          Previous
-        </button>
-        <span className="dark:text-appaccent">
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-slate-300 rounded disabled:opacity-50 hover:-translate-y-1 hover:bg-slate-300/80 hover:shadow-white transition-all duration-300"
-        >
-          Next
-        </button>
-      </div>
+      {selectedImages.length != 0 && (
+        <div className="text-black flex justify-between">
+          <button
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-slate-300 rounded disabled:opacity-50 hover:-translate-y-1 hover:bg-slate-300/80 hover:shadow-white transition-all duration-300"
+          >
+            Previous
+          </button>
+          <span className="dark:text-appaccent">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-slate-300 rounded disabled:opacity-50 hover:-translate-y-1 hover:bg-slate-300/80 hover:shadow-white transition-all duration-300"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

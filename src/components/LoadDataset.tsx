@@ -29,24 +29,42 @@ const LoadDataset = ({
     // Clear input images store
     clearInputImages();
 
-    // Assuming the images are stored in src/assets/images/DefaultDataset
+    // // Assuming the images are stored in src/assets/images/DefaultDataset
+    // const images = import.meta.glob("@/assets/images/DefaultDataset/*.png", {
+    //   eager: true,
+    // });
+
+    // // Convert the imported modules to File objects if needed
+    // Object.values(images).forEach((module) => {
+    //   // The module is an object with a default property containing the URL
+    //   const imageUrl = (module as { default: string }).default;
+
+    //   fetch(imageUrl)
+    //     .then((res) => res.blob())
+    //     .then((blob) => {
+    //       const fileName = imageUrl.split("/").pop() || "image.png";
+    //       const file = new File([blob], fileName, { type: blob.type });
+    //       addInputImage(file);
+    //     });
+    // });
+
+     // Assuming the images are stored in src/assets/images/DefaultDataset
     const images = import.meta.glob("@/assets/images/DefaultDataset/*.png", {
       eager: true,
+      as: "url",
     });
 
-    // Convert the imported modules to File objects if needed
-    Object.values(images).forEach((module) => {
-      // The module is an object with a default property containing the URL
-      const imageUrl = (module as { default: string }).default;
-
-      fetch(imageUrl)
-        .then((res) => res.blob())
-        .then((blob) => {
-          const fileName = imageUrl.split("/").pop() || "image.png";
-          const file = new File([blob], fileName, { type: blob.type });
-          addInputImage(file);
-        });
-    });
+    // Use Promise.all to fetch all images concurrently
+    await Promise.all(
+      Object.entries(images).map(async ([path, url]) => {
+        console.log(path, url);
+        const response = await fetch(url as string);
+        const blob = await response.blob();
+        const fileName = path.split("/").pop() || "image.png";
+        const file = new File([blob], fileName, { type: blob.type });
+        addInputImage(file);
+      })
+    );
 
     // Switch to Input Images tab
     setActiveTab("Input Images");
